@@ -9,10 +9,10 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { getInitials, getAvatarUrl, formatDate } from '@/lib/utils'
 import {
-  Heart, MessageCircle, Image, Paperclip, Send, Trash2,
+  MessageCircle, Image, Paperclip, Send, Trash2,
   ChevronDown, Globe, Building2, Briefcase, Users,
   MessageSquare, X, Minus, ChevronUp, BookOpen, Calendar,
-  ArrowRight, Loader2,
+  ArrowRight, Loader2, FileText,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -30,10 +30,11 @@ const MODULE_CONFIG: Record<string, { icon: any; color: string; bg: string; bord
   activity:    { icon: Calendar,  color: 'text-violet-700', bg: 'bg-violet-50',  border: 'border-violet-200', label: 'Activité',    href: '/activities'    },
   opportunity: { icon: Briefcase, color: 'text-amber-700',  bg: 'bg-amber-50',   border: 'border-amber-200',  label: 'Opportunité', href: '/opportunities' },
   knowledge:   { icon: BookOpen,  color: 'text-teal-700',   bg: 'bg-teal-50',    border: 'border-teal-200',   label: 'Ressource',   href: '/knowledge'     },
+  petition:    { icon: FileText,  color: 'text-rose-700',   bg: 'bg-rose-50',    border: 'border-rose-200',   label: 'Pétition',    href: '/petitions'     },
 }
 
 // ════════════════════════════════════════════════════════════════
-// MODULE POST CARD (activity / opportunity / knowledge)
+// MODULE POST CARD (activity / opportunity / knowledge / petition)
 // ════════════════════════════════════════════════════════════════
 function ModulePostCard({ post, currentUser, onDelete }: any) {
   const cfg = MODULE_CONFIG[post.post_type] || MODULE_CONFIG.activity
@@ -42,7 +43,6 @@ function ModulePostCard({ post, currentUser, onDelete }: any) {
   return (
     <div className={`rounded-2xl border-2 ${cfg.border} ${cfg.bg} overflow-hidden animate-fade-up`}
       style={{ boxShadow: '0 2px 16px 0 rgba(0,0,0,0.07)' }}>
-      {/* Top badge stripe */}
       <div className={`flex items-center justify-between px-5 py-3 border-b ${cfg.border}`}>
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-white shadow-sm">
@@ -61,7 +61,6 @@ function ModulePostCard({ post, currentUser, onDelete }: any) {
       </div>
 
       <div className="p-5">
-        {/* Author */}
         <div className="flex items-center gap-2.5 mb-4">
           <Avatar className="w-8 h-8">
             <AvatarImage src={getAvatarUrl(post.author?.full_name || 'U', post.author?.avatar_url)} />
@@ -69,12 +68,13 @@ function ModulePostCard({ post, currentUser, onDelete }: any) {
           </Avatar>
           <p className="text-sm text-gray-600">
             <span className="font-semibold text-gray-900">{post.author?.full_name || 'Utilisateur'}</span>
-            {' '}a publié un{post.post_type === 'activity' ? 'e' : post.post_type === 'knowledge' ? 'e' : ''}{' '}
+            {post.post_type === 'petition'
+              ? ' a lancé une '
+              : ` a publié un${post.post_type === 'activity' ? 'e' : post.post_type === 'knowledge' ? 'e' : ''} `}
             <span className={`font-medium ${cfg.color}`}>{cfg.label.toLowerCase()}</span>
           </p>
         </div>
 
-        {/* Content card */}
         <div className="bg-white rounded-xl border border-white/80 shadow-sm overflow-hidden">
           {post.ref_cover && (
             <img src={post.ref_cover} alt="" className="w-full h-36 object-cover" />
@@ -91,7 +91,7 @@ function ModulePostCard({ post, currentUser, onDelete }: any) {
             <div className="px-4 py-3 border-t border-gray-100 flex justify-end">
               <Link href={`${cfg.href}/${post.ref_id}`}>
                 <button className={`inline-flex items-center gap-1.5 text-sm font-semibold ${cfg.color} hover:opacity-80 transition-opacity`}>
-                  Voir plus <ArrowRight className="w-3.5 h-3.5" />
+                  {post.post_type === 'petition' ? 'Signer la pétition' : 'Voir plus'} <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </Link>
             </div>
@@ -112,7 +112,6 @@ function PostCard({ post, currentUser, onReact, onComment, onDelete }: any) {
   const [submitting, setSubmitting] = useState(false)
   const reactionTimeout = useRef<any>(null)
 
-  // Delegate to ModulePostCard for activity/opportunity/knowledge posts
   if (post.post_type && post.post_type !== 'post') {
     return <ModulePostCard post={post} currentUser={currentUser} onDelete={onDelete} />
   }
@@ -404,6 +403,16 @@ function BrowseWidget() {
           <div>
             <p className="text-sm font-semibold text-gray-900">Groupes</p>
             <p className="text-xs text-gray-400">Espaces de discussion</p>
+          </div>
+        </Link>
+        <Link href="/petitions"
+          className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 transition-colors group">
+          <div className="w-9 h-9 rounded-xl bg-rose-100 flex items-center justify-center flex-shrink-0 group-hover:bg-rose-200 transition-colors">
+            <FileText className="w-4 h-4 text-rose-700" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Pétitions</p>
+            <p className="text-xs text-gray-400">Actions citoyennes</p>
           </div>
         </Link>
       </div>

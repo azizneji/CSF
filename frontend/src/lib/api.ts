@@ -284,3 +284,63 @@ export const groupsApi = {
   getMessages: (id: string) => api.get(`/groups/${id}/messages`),
   sendMessage: (id: string, content: string) => api.post(`/groups/${id}/messages`, { content }),
 }
+
+// ─────────Petitions────────────────────────────────────────────────────
+
+export const petitionsApi = {
+  // Browse
+  getAll: (params?: { status?: string; search?: string; page?: number }) =>
+    api.get('/petitions', { params }),
+
+  // Single
+  getById: (id: string) =>
+    api.get(`/petitions/${id}`),
+
+  // Create
+  create: (data: {
+    title: string
+    description: string
+    objective: string
+    target_institution?: string
+    cover_url?: string
+    author_type: 'user' | 'organization'
+    author_id: string
+    goal?: number
+    deadline?: string
+  }) => api.post('/petitions', data),
+
+  // Update
+  update: (id: string, data: Partial<{
+    title: string
+    description: string
+    objective: string
+    target_institution: string
+    cover_url: string
+    goal: number
+    deadline: string
+  }>) => api.patch(`/petitions/${id}`, data),
+
+  // Delete
+  delete: (id: string) =>
+    api.delete(`/petitions/${id}`),
+
+  // Close manually
+  close: (id: string) =>
+    api.post(`/petitions/${id}/close`),
+
+  // Sign
+  sign: (id: string, data: { comment?: string; share_to_feed?: boolean }) =>
+    api.post(`/petitions/${id}/sign`, data),
+
+  // Unsign
+  unsign: (id: string) =>
+    api.delete(`/petitions/${id}/sign`),
+
+  // Get signatures list
+  getSignatures: (id: string, page = 1) =>
+    api.get(`/petitions/${id}/signatures`, { params: { page } }),
+
+  // Add creator update
+  addUpdate: (id: string, content: string) =>
+    api.post(`/petitions/${id}/updates`, { content }),
+}

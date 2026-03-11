@@ -24,6 +24,8 @@ import { SearchModule } from './search/search.module'
 import { MessagingModule } from './messaging/messaging.module'
 // Groups module
 import { GroupsModule } from './groups/groups.module'
+// Petitions
+import { PetitionsModule } from './petitions/petitions.module'
  // analytics
 import { AnalyticsModule } from './analytics/analytics.module'
 import { PlatformAnalyticsModule } from './platform-analytics/platform-analytics.module'
@@ -56,6 +58,8 @@ import { PlatformAnalyticsModule } from './platform-analytics/platform-analytics
     PlatformAnalyticsModule,
     // Groups
     GroupsModule,
+    // Petitions
+    PetitionsModule
   ],
 })
 export class AppModule {}
