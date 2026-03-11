@@ -124,7 +124,7 @@ export default function OrganizationDetailPage() {
                 <div className="flex items-center gap-2 mb-2">
                   <h1 className="font-display text-3xl font-bold text-gray-900">{org.name}</h1>
                   {org.is_verified && (
-                    <CheckCircle2 className="w-5 h-5 text-brand-600 flex-shrink-0" title="Organisation vérifiée" />
+                    <CheckCircle2 className="w-5 h-5 text-brand-600 flex-shrink-0" />
                   )}
                 </div>
                 <div className="flex flex-wrap gap-2">
