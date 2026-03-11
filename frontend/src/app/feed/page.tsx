@@ -117,7 +117,7 @@ function PostCard({ post, currentUser, onReact, onComment, onDelete }: any) {
     return <ModulePostCard post={post} currentUser={currentUser} onDelete={onDelete} />
   }
 
-  const totalReactions = Object.values(post.reaction_counts || {}).reduce((a: any, b: any) => a + b, 0)
+  const totalReactions = Object.values(post.reaction_counts || {}).reduce((a: number, b: unknown) => a + (b as number), 0) as number
   const userReaction = (post.reactions || []).find((r: any) => r.user_id === currentUser?.id)
 
   const handleReact = (type: string) => {
