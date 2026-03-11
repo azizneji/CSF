@@ -396,6 +396,16 @@ function BrowseWidget() {
             <p className="text-xs text-gray-400">Partenaires & acteurs</p>
           </div>
         </Link>
+        <Link href="/groups"
+          className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-gray-50 transition-colors group">
+          <div className="w-9 h-9 rounded-xl bg-violet-100 flex items-center justify-center flex-shrink-0 group-hover:bg-violet-200 transition-colors">
+            <Users className="w-4 h-4 text-violet-700" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Groupes</p>
+            <p className="text-xs text-gray-400">Espaces de discussion</p>
+          </div>
+        </Link>
       </div>
     </div>
   )
@@ -411,8 +421,6 @@ function InfoWidget() {
     api.get('/admin/settings').then(res => {
       const settings = res.data || {}
       const widgets: any[] = []
-      // Superadmin sets feed_widget_1 … feed_widget_5 in platform_settings
-      // JSON format: { type: 'text'|'image'|'stat'|'link', title?, content?, url?, value?, label? }
       for (let i = 1; i <= 5; i++) {
         const raw = settings[`feed_widget_${i}`]
         if (raw) {
@@ -437,7 +445,7 @@ function InfoWidget() {
           </div>
           <div className="p-3 bg-gray-50 rounded-xl">
             <p className="text-xs text-gray-400">
-              Cette section est gérée par l'administrateur de la plateforme.
+              Cette section est gérée par l&apos;administrateur de la plateforme.
             </p>
           </div>
         </div>
@@ -519,7 +527,6 @@ function MessagingWidget({ user }: { user: any }) {
     } catch {}
   }, [myActor?.id])
 
-  // Poll conversations when open
   useEffect(() => {
     if (!open || !myActor) return
     loadConversations()
@@ -527,7 +534,6 @@ function MessagingWidget({ user }: { user: any }) {
     return () => clearInterval(poll)
   }, [open, loadConversations])
 
-  // Poll messages when conversation open
   useEffect(() => {
     if (!activeConv) return
     setLoading(true)
@@ -558,7 +564,6 @@ function MessagingWidget({ user }: { user: any }) {
 
   return (
     <div className="fixed bottom-5 right-5 z-50">
-      {/* Bubble */}
       {!open && (
         <button onClick={() => setOpen(true)}
           className="w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 relative">
@@ -571,12 +576,10 @@ function MessagingWidget({ user }: { user: any }) {
         </button>
       )}
 
-      {/* Panel */}
       {open && (
         <div className={`bg-white rounded-2xl shadow-xl border border-gray-200 flex flex-col overflow-hidden transition-all ${
           minimized ? 'w-72 h-12' : 'w-80 h-[480px]'
         }`}>
-          {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 bg-brand-600 text-white flex-shrink-0">
             <div className="flex items-center gap-2">
               {activeConv && (
@@ -601,7 +604,6 @@ function MessagingWidget({ user }: { user: any }) {
 
           {!minimized && (
             <>
-              {/* Conversation list */}
               {!activeConv && (
                 <div className="flex-1 overflow-y-auto">
                   {conversations.length === 0 ? (
@@ -638,7 +640,6 @@ function MessagingWidget({ user }: { user: any }) {
                 </div>
               )}
 
-              {/* Active conversation messages */}
               {activeConv && (
                 <>
                   <div className="flex-1 overflow-y-auto p-3 space-y-2">
@@ -746,7 +747,7 @@ export default function FeedPage() {
           {/* ── Main feed ── */}
           <main className="flex-1 min-w-0">
             <div className="mb-6">
-              <h1 className="font-display text-3xl font-bold text-gray-900 mb-0.5">Fil d'actualité</h1>
+              <h1 className="font-display text-3xl font-bold text-gray-900 mb-0.5">Fil d&apos;actualité</h1>
               <p className="text-gray-500 text-sm">Les dernières nouvelles de la communauté</p>
             </div>
 

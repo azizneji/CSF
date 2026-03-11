@@ -22,6 +22,8 @@ import { SupportModule } from './support/support.module'
 import { NotificationsModule } from './notifications/notifications.module'
 import { SearchModule } from './search/search.module'
 import { MessagingModule } from './messaging/messaging.module'
+// Groups module
+import { GroupsModule } from './groups/groups.module'
  // analytics
 import { AnalyticsModule } from './analytics/analytics.module'
 import { PlatformAnalyticsModule } from './platform-analytics/platform-analytics.module'
@@ -52,6 +54,8 @@ import { PlatformAnalyticsModule } from './platform-analytics/platform-analytics
     MessagingModule,
     AnalyticsModule,
     PlatformAnalyticsModule,
+    // Groups
+    GroupsModule,
   ],
 })
 export class AppModule {}

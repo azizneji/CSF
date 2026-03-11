@@ -237,3 +237,50 @@ export const uploadsApi = {
     return api.post('/uploads/cover', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
   },
 }
+
+// ─── Groups ───────────────────────────────────────────────────
+// ADD THIS BLOCK to your existing api.ts file
+
+export const groupsApi = {
+  getAll: (search?: string) => api.get('/groups', { params: { search } }),
+  getMine: () => api.get('/groups/mine'),
+  getById: (id: string) => api.get(`/groups/${id}`),
+  create: (data: any) => api.post('/groups', data),
+  update: (id: string, data: any) => api.patch(`/groups/${id}`, data),
+  delete: (id: string) => api.delete(`/groups/${id}`),
+
+  // Membership
+  join: (id: string, message?: string) => api.post(`/groups/${id}/join`, { message }),
+  leave: (id: string) => api.post(`/groups/${id}/leave`),
+  getMembers: (id: string) => api.get(`/groups/${id}/members`),
+  updateMemberRole: (id: string, userId: string, role: string) =>
+    api.patch(`/groups/${id}/members/${userId}/role`, { role }),
+  kickMember: (id: string, userId: string) => api.delete(`/groups/${id}/members/${userId}`),
+
+  // Join requests
+  getJoinRequests: (id: string) => api.get(`/groups/${id}/join-requests`),
+  respondJoinRequest: (id: string, requestId: string, action: 'accepted' | 'rejected') =>
+    api.patch(`/groups/${id}/join-requests/${requestId}`, { action }),
+
+  // Invites
+  invite: (id: string, userId: string) => api.post(`/groups/${id}/invite`, { user_id: userId }),
+  respondInvite: (id: string, action: 'accepted' | 'rejected') =>
+    api.post(`/groups/${id}/invites/respond`, { action }),
+  getMyInvites: () => api.get('/groups/invites'),
+
+  // Posts
+  getPosts: (id: string) => api.get(`/groups/${id}/posts`),
+  getPendingPosts: (id: string) => api.get(`/groups/${id}/posts/pending`),
+  createPost: (id: string, data: any) => api.post(`/groups/${id}/posts`, data),
+  approvePost: (id: string, postId: string, action: 'approved' | 'rejected') =>
+    api.patch(`/groups/${id}/posts/${postId}/approve`, { action }),
+  deletePost: (id: string, postId: string) => api.delete(`/groups/${id}/posts/${postId}`),
+  reactPost: (id: string, postId: string, type = 'like') =>
+    api.post(`/groups/${id}/posts/${postId}/react`, { type }),
+  commentPost: (id: string, postId: string, content: string) =>
+    api.post(`/groups/${id}/posts/${postId}/comments`, { content }),
+
+  // Messages
+  getMessages: (id: string) => api.get(`/groups/${id}/messages`),
+  sendMessage: (id: string, content: string) => api.post(`/groups/${id}/messages`, { content }),
+}
