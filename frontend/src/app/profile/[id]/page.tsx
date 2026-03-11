@@ -159,7 +159,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Organizations */}
-        {profile.organizations && profile.organizations.length > 0 && (
+        {(profile as any).organizations && (profile as any).organizations.length > 0 && (
           <Card className="animate-fade-up">
             <CardContent className="p-6">
               <h2 className="font-display text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
