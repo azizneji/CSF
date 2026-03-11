@@ -253,26 +253,22 @@ export class PetitionsService {
       .select('user_id')
       .eq('petition_id', petition.id)
 
-    for (const signer of signers || []) {
-      await this.notifications.createNotification({
-        user_id: signer.user_id,
-        type: 'petition_goal_reached',
-        title: 'Objectif atteint !',
-        message: `La pétition "${petition.title}" a atteint son objectif de ${petition.goal} signatures !`,
-        link: `/petitions/${petition.id}`,
-      })
-    }
+    const signerIds = (signers || []).map((s: any) => s.user_id)
+    await this.notifications.createBatch(
+      signerIds,
+      'admin_broadcast' as any,
+      `La pétition "${petition.title}" a atteint son objectif de ${petition.goal} signatures !`,
+      `/petitions/${petition.id}`,
+    )
 
     // Notify petition owner
     if (petition.author_type === 'user') {
-      await this.notifications.createNotification({
-        user_id: petition.author_id,
-        type: 'petition_goal_reached',
-        title: 'Votre pétition a atteint son objectif !',
-        message: `"${petition.title}" a recueilli ${petition.goal} signatures. Un PDF a été généré.`,
-        link: `/petitions/${petition.id}`,
-        data: { pdf_url: pdfUrl },
-      })
+      await this.notifications.create(
+        petition.author_id,
+        'admin_broadcast' as any,
+        `"${petition.title}" a recueilli ${petition.goal} signatures. Un PDF a été généré.`,
+        `/petitions/${petition.id}`,
+      )
     }
 
     // Create feed post about goal reached
