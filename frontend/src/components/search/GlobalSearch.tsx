@@ -120,7 +120,7 @@ export function GlobalSearch() {
     setResults({})
   }
 
-  const totalResults = Object.values(results).reduce((acc: number, arr: any) => acc + (arr?.length || 0), 0)
+  const totalResults = Object.values(results).reduce((acc: number, arr: any) => acc + (arr?.length || 0), 0) as number
   const hasResults = totalResults > 0
 
   return (
